@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
@@ -27,6 +27,12 @@ async function run() {
             const query = { email }
             const result = await todoCollection.find(query).toArray()
             res.send(result)
+        })
+        app.delete('/task/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const result = await todoCollection.deleteOne(filter)
+            res.send(result);
         })
 
     } finally {
