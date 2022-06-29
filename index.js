@@ -15,9 +15,12 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
+        const todoCollection = client.db("IELTSTodo").collection("task");
 
-        app.get('/to', async (req, res) => {
-            res.send('THIS READy')
+        app.post('/task', async (req, res) => {
+            const users = req.body;
+            const result = await todoCollection.insertOne(users)
+            res.send(result)
         })
 
 
